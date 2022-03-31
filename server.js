@@ -19,4 +19,6 @@ tuitsController(app);
 app.get('/', (req, res) =>
     {res.send('Welcome to Full Stack Development!')})
 
-app.listen(4000);
+app.listen(process.env.PORT || 4000);
+// it uses the PORT environment variable if available on Heroku,
+// or uses 4000 otherwise when running locally on our machines.
