@@ -121,5 +121,4 @@ export default [
             "thumbUp": 0,
             "thumbDown": 0
         }
-
 ];

@@ -1,5 +1,4 @@
 import dao from "./dao.js";
-// import findAllMovies from "./dao.js";
 export default (app) => {
     app.get("/rest/movies", findAllMovies);
     app.delete("/rest/movies/:id", deleteMovie);

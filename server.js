@@ -22,7 +22,7 @@ tuitsController(app);
 app.get('/', (req, res) =>
     {res.send('Welcome to Full Stack Development!')})
 
-import service from "./movies/service.js";
+import service from "./db/movies/service.js";
 service(app);
 app.listen(process.env.PORT || 4000);
 // it uses the PORT environment variable if available on Heroku,
