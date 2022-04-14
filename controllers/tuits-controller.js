@@ -1,5 +1,6 @@
-import posts from "./tuits.js";
-let tuits = posts;
+import tuitsDao from "../db/tuits/tuits-dao.js";
+// import posts from "./tuits.js";
+// let tuits = posts;
 
 // const createTuit = (req, res) => {}
 // const updateTuit = (req, res) => {}
@@ -11,31 +12,52 @@ export default (app) => {
     app.delete('/api/tuits/:tid', deleteTuit);
 }
 
-const updateTuit = (req, res) => {
-    const tuitdIdToUpdate = req.params.tid;
-    const updatedTuit = req.body;
-    tuits = tuits.map(t =>
-                          t._id === tuitdIdToUpdate ?
-                          updatedTuit :
-                          t);
-    res.sendStatus(200);
-}
-
-const findAllTuits = (req, res) => {
+const findAllTuits = async (req, res) => {
+    const tuits = await tuitsDao.findAllTuits()
     res.json(tuits);
 }
 
-const createTuit = (req, res) => {
+
+const createTuit = async (req, res) => {
     const newTuit = req.body;
-    newTuit._id = (new Date()).getTime()+'';
-    tuits.push(newTuit);
-    res.json(newTuit);
+    const formattedNewTuit = {
+        ...newTuit,
+        "topic": "New Tuit from Server",
+        "postedBy": {
+            "username": "try in controller"
+        },
+        "handle": "ReactJS",
+        "time": "2h",
+        "title": "The New Tuit From node db",
+        "logo_image": "../img/react.jpg",
+        "avatar_image": "../img/react.jpg",
+        "stats": {
+            "comments": 0,
+            "retuits": 0,
+            "likes": 0
+        },
+        "thumbUp": 0,
+        "thumbDown": 0
+    };
+    console.log("node: tuits-controller");
+    console.log(formattedNewTuit);
+    const insertedTuit = await tuitsDao.createTuit(formattedNewTuit);
+    res.json(insertedTuit);
 }
 
-const deleteTuit = (req, res) => {
+const deleteTuit = async (req, res) => {
     const tuitdIdToDelete = req.params.tid;
-    tuits = tuits.filter(t => t._id !==
-                              tuitdIdToDelete);
-    res.sendStatus(200);
+    console.log(tuitdIdToDelete);
+    const status = await tuitsDao.deleteTuit(tuitdIdToDelete);
+    console.log(status);
+    res.send(status);
+}
+
+
+const updateTuit = async (req, res) => {
+    const tuitdIdToUpdate = req.params.tid;
+    const updatedTuit = req.body;
+    const status = await tuitsDao.updateTuit(tuitdIdToUpdate, updatedTuit);
+    res.send(status);
 }
 
